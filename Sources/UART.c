@@ -34,7 +34,7 @@ bool UART_Init(const uint32_t baudRate, const uint32_t moduleClk)
   //Enable UART 2 C2 Transmitter
   UART2_C2 |= UART_C2_TE_MASK;
 
-
+  //UART baud rate = UART module clock / (16 × (SBR[12:0] + BRFD))
 
   FIFO_Init(&myFifoA);
   FIFO_Init(&myFifoB);
