@@ -48,6 +48,7 @@ int main(void)
 
   /* Write your code here */
   FIFO_Init(&MyFifoA);
+  UART_Init(115200, CPU_BUS_CLK_HZ);
   for (;;)
   {
       FIFO_Put(&MyFifoA, 0x0a);

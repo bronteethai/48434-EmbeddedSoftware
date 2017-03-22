@@ -4,6 +4,7 @@
 #include "uart.h"
 #include "MK70F12.h"
 #include "CPU.h"
+#include "types.h"
 
 TFIFO myFifoA;
 TFIFO myFifoB;
@@ -22,7 +23,18 @@ bool UART_Init(const uint32_t baudRate, const uint32_t moduleClk)
   SIM_SCGC4 |= SIM_SCGC4_UART2_MASK;
   //Enable PORT E pin routing
   SIM_SCGC5 |= SIM_SCGC5_PORTE_MASK;
-  //
+  //Pin Multiplexing
+  //Sets MUX bits in porte16 to refer to alt 3
+  PORTE_PCR16 |= PORT_PCR_MUX(3);
+  //Sets MUX bits in porte17 to refer to alt 3
+  PORTE_PCR17 |= PORT_PCR_MUX(3);
+
+  //Enable UART2 C2 Receiver
+  UART2_C2 |= UART_C2_RE_MASK;
+  //Enable UART 2 C2 Transmitter
+  UART2_C2 |= UART_C2_TE_MASK;
+
+
 
   FIFO_Init(&myFifoA);
   FIFO_Init(&myFifoB);
