@@ -2,7 +2,8 @@
 
 #include "fifo.h"
 #include "uart.h"
-
+#include "MK70F12.h"
+#include "CPU.h"
 
 TFIFO myFifoA;
 TFIFO myFifoB;
@@ -17,6 +18,12 @@ TFIFO myFifoB;
 
 bool UART_Init(const uint32_t baudRate, const uint32_t moduleClk)
 {
+  //Enable UART2 Module
+  SIM_SCGC4 |= SIM_SCGC4_UART2_MASK;
+  //Enable PORT E pin routing
+  SIM_SCGC5 |= SIM_SCGC5_PORTE_MASK;
+  //
+
   FIFO_Init(&myFifoA);
   FIFO_Init(&myFifoB);
 
