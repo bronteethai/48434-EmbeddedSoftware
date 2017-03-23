@@ -19,25 +19,36 @@ TFIFO myFifoB;
 
 bool UART_Init(const uint32_t baudRate, const uint32_t moduleClk)
 {
-  //Enable UART2 Module
-  SIM_SCGC4 |= SIM_SCGC4_UART2_MASK;
-  //Enable PORT E pin routing
-  SIM_SCGC5 |= SIM_SCGC5_PORTE_MASK;
-  //Pin Multiplexing
-  //Sets MUX bits in porte16 to refer to alt 3
-  PORTE_PCR16 |= PORT_PCR_MUX(3);
-  //Sets MUX bits in porte17 to refer to alt 3
-  PORTE_PCR17 |= PORT_PCR_MUX(3);
+	//Enable UART2 Module
+	SIM_SCGC4 |= SIM_SCGC4_UART2_MASK;
+	//Enable PORT E pin routing
+	SIM_SCGC5 |= SIM_SCGC5_PORTE_MASK;
+	//Pin Multiplexing
+	//Sets MUX bits in porte16 to refer to alt 3
+	PORTE_PCR16 |= PORT_PCR_MUX(3);
+	//Sets MUX bits in porte17 to refer to alt 3
+	PORTE_PCR17 |= PORT_PCR_MUX(3);
+	
+	//Enable UART2 C2 Receiver
+	UART2_C2 |= UART_C2_RE_MASK;
+	//Enable UART 2 C2 Transmitter
+	UART2_C2 |= UART_C2_TE_MASK;
+	
+	//UART baud rate = UART module clock / (16 Ã— (SBR[12:0] + BRFD))
+	uint16_t sbr = moduleClk/(16*baudRate);
+	//top 5 bits for UART2_BDH
+	uint8_t sbr_top5 = sbr >> 8;
+	//keep the top 3 bits of bdh and set the last 5 to the top 5 bits of SBR
+	UART2_BDH = (UART2_BDH & 0xC0) | (sbr_top5 & 0x1F);
+	
+	//bottom 8 bits for UART2_BDL
+	uint8_t sbr_bot8 = sbr << 8;
+	//bottom 8 bits directly into UART2_BDL
+	UART2_BDL = sbr_bot8;
 
-  //Enable UART2 C2 Receiver
-  UART2_C2 |= UART_C2_RE_MASK;
-  //Enable UART 2 C2 Transmitter
-  UART2_C2 |= UART_C2_TE_MASK;
 
-  //UART baud rate = UART module clock / (16 × (SBR[12:0] + BRFD))
-
-  FIFO_Init(&myFifoA);
-  FIFO_Init(&myFifoB);
+	FIFO_Init(&myFifoA);
+	FIFO_Init(&myFifoB);
 
   // other uart init stuff.
 }
