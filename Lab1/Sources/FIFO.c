@@ -63,9 +63,9 @@ bool FIFO_Get(TFIFO * const FIFO, uint8_t * const dataPtr)
     *dataPtr = FIFO->Buffer[FIFO->Start++]; //the value of Start is incremented AFTER it is accessed
     FIFO->NbBytes--;
     if (FIFO->Start>=FIFO_SIZE)
-	{
+    {
       FIFO->Start = 0;
-	}	  	
+    }	  	
 	return true;
   }
 }
