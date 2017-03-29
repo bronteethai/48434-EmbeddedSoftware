@@ -66,6 +66,6 @@ bool FIFO_Get(TFIFO * const FIFO, uint8_t * const dataPtr)
     {
       FIFO->Start = 0;
     }	  	
-	return true;
+    return true;
   }
 }
