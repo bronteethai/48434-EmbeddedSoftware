@@ -71,7 +71,8 @@ bool UART_Init(const uint32_t baudRate, const uint32_t moduleClk)
  *  @return bool - TRUE if the receive FIFO returned a character.
  *  @note Assumes that UART_Init has been called.
  */
-bool UART_InChar(uint8_t * const dataPtr){
+bool UART_InChar(uint8_t * const dataPtr)
+{
 	return FIFO_Get(&receiveFifo, dataPtr);
 }
 
@@ -81,7 +82,8 @@ bool UART_InChar(uint8_t * const dataPtr){
  *  @return bool - TRUE if the data was placed in the transmit FIFO.
  *  @note Assumes that UART_Init has been called.
  */
-bool UART_OutChar(const uint8_t data){
+bool UART_OutChar(const uint8_t data)
+{
 	return FIFO_Put(&transmitFifo, data);
 }
 
@@ -90,13 +92,16 @@ bool UART_OutChar(const uint8_t data){
  *  @return void
  *  @note Assumes that UART_Init has been called.
  */
-void UART_Poll(void){
+void UART_Poll(void)
+{
   //checks uart2_s1 "TDRE" bit -> 1 indicates we should write to uart D
-  if (UART2_S1 & UART_S1_TDRE_MASK){
+  if (UART2_S1 & UART_S1_TDRE_MASK)
+  {
       FIFO_Get(&transmitFifo, &UART2_D);
   }
   //checks uart2_s1 "RDRF" bit -> 1 indicates we should read uart D
-  if (UART2_S1 & UART_S1_RDRF_MASK){
+  if (UART2_S1 & UART_S1_RDRF_MASK)
+  {
       FIFO_Put(&receiveFifo, UART2_D);
   }
 

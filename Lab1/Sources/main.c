@@ -50,7 +50,8 @@ int main(void)
 
   /* Write your code here */
   Packet_Init(38400, CPU_BUS_CLK_HZ);
-  for (;;) {
+  for (;;)
+  {
     UART_Poll();
     //if a valid packet is received
     if (Packet_Get()) {
