@@ -50,17 +50,12 @@ int main(void)
 
   /* Write your code here */
   Packet_Init(38400, CPU_BUS_CLK_HZ);
-  for (;;)
-  {
-      UART_Poll();
-      //if a valid packet is received
-      if (Packet_Get()) {
-	  Packet_Processor();
-      }
-/*      FIFO_Put(&MyFifoA, 0x0a);
-      FIFO_Put(&MyFifoA, 0x0b);
-      FIFO_Put(&MyFifoA, 0x0c);
-      FIFO_Get(&MyFifoA, &testvar);*/
+  for (;;) {
+    UART_Poll();
+    //if a valid packet is received
+    if (Packet_Get()) {
+      Packet_Processor();
+    }
   }
 
   /*** Don't write any code pass this line, or it will be deleted during code generation. ***/
