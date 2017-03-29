@@ -31,30 +31,36 @@
 // CPU mpdule - contains low level hardware initialization routines
 #include "Cpu.h"
 #include "FIFO.h"
-
+#include "UART.h"
+#include "Packet.h"
 
 // Global variables
-TFIFO MyFifoA;
+
+
 /*lint -save  -e970 Disable MISRA rule (6.3) checking. */
 int main(void)
 /*lint -restore Enable MISRA rule (6.3) checking. */
 {
   /* Write your local variable definition here */
-  uint8_t testvar;
+
   /*** Processor Expert internal initialization. DON'T REMOVE THIS CODE!!! ***/
   PE_low_level_init();
   // uart init(baud rate, something else);
   /*** End of Processor Expert internal initialization.                    ***/
 
   /* Write your code here */
-  FIFO_Init(&MyFifoA);
-  UART_Init(115200, CPU_BUS_CLK_HZ);
+  Packet_Init(38400, CPU_BUS_CLK_HZ);
   for (;;)
   {
-      FIFO_Put(&MyFifoA, 0x0a);
+      UART_Poll();
+      //if a valid packet is received
+      if (Packet_Get()) {
+	  Packet_Processor();
+      }
+/*      FIFO_Put(&MyFifoA, 0x0a);
       FIFO_Put(&MyFifoA, 0x0b);
       FIFO_Put(&MyFifoA, 0x0c);
-      FIFO_Get(&MyFifoA, &testvar);
+      FIFO_Get(&MyFifoA, &testvar);*/
   }
 
   /*** Don't write any code pass this line, or it will be deleted during code generation. ***/
